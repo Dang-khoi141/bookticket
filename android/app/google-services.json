@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1054394084983",
+    "project_id": "flight-61667",
+    "storage_bucket": "flight-61667.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054394084983:android:93e58b2e3a286191a82072",
+        "android_client_info": {
+          "package_name": "com.bookticket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnC_3h03tfFt960HJTptDw9GMWA64gTt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
