@@ -3,9 +3,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const FlightDetails = ({ navigation, route }) => {
-    // Dữ liệu mẫu được thêm vào
-    const flightData = route.params?.flightData ?? {
+const FlightDetails = ({ navigation }) => {
+    // Kiểm tra xem route có tồn tại hay không, nếu không, dùng dữ liệu mẫu
+    const flightData =   {
         trip: {
             origin: 'London',
             destination: 'New York City',

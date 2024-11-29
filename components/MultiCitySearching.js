@@ -72,6 +72,7 @@ const handleLocationSelect = (location) => {
     setModalVisible(false);
 };
 
+
     const handleDateSelect = (date) => {
         updateFlight(selectedFlightIndex, 'date', date);
         setDatePickerVisible(false);
@@ -133,7 +134,7 @@ const handleLocationSelect = (location) => {
                                     setDatePickerVisible(true);
                                 }}>
                                     <Icon name="calendar" size={16} color="#9095a0" style={styles.dateIcon} />
-                                    <Text style={styles.dateLabel}>{flight.date.toDateString()}</Text>
+                                    {/* <Text style={styles.dateLabel}>{flight.date.toDateString()}</Text> */}
                                 </TouchableOpacity>
                                 {index > 0 && (
                                     <TouchableOpacity onPress={() => removeFlight(index)}>

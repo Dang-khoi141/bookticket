@@ -11,14 +11,21 @@ import PassengerInformation from './components/PassengerInformation';
 import PaymentScreen from './components/PaymentInformation';
 import BaggageScreen from './components/BaggageInformation';
 import HomeScreen from './components/Home';
+import LoginScreen from './components/login';
+import registerpage from './components/register';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name='Login'component={LoginScreen}
+         options={{ headerShown: false }} 
+         />
+         <Stack.Screen name="registerpage" component={registerpage} />
+        <Stack.Screen name="Home" component={HomeScreen} 
+        options={{ headerShown: false }}/>
         <Stack.Screen name="RoundTrip" component={RoundTripSearching} />
         <Stack.Screen name="RoundTripSearching" component={RoundTripSearching}  
         options={{ headerShown: false }} />
@@ -28,10 +35,9 @@ export default function App() {
         <Stack.Screen name="MultiCity" component={MultiCitySearching} />
         <Stack.Screen name="MultiCitySearching" component={MultiCitySearching} 
         options={{ headerShown: false }}/>
-        <Stack.Screen name="SearchResult" component={SearchResult} />
-        {/* <Stack.Screen name="DemoListInModal" component={DemoListInModal} /> */}
+        <Stack.Screen name="SearchResult" component={SearchResult} 
+        options={{ headerShown: false }}/>
         <Stack.Screen name="SearchResults" component={SearchResultsDemo} />
-        {/* <Stack.Screen name="FlightFilterScreen" component={FlightFilterScreen} /> */}
         <Stack.Screen name="FlightDetails" component={FlightDetails} />
         <Stack.Screen name="PassengerInformation" component={PassengerInformation} />
         <Stack.Screen name="PaymentScreen" component={PaymentScreen} />

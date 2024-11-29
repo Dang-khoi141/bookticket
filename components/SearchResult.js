@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { flights, locations } from './flightData';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SortFilterModal from './SortFilterModal';
 
@@ -43,9 +42,9 @@ const SearchResult = ({ navigation, route }) => {
         const fetchFlightData = async () => {
             try {
                 const db = firestore();
-                const flightRef = db.collection('flight');
+                const flightRef = db.collection('flight1');
                 let query = flightRef;
-
+                console.log(flightRef)
                 // Function to fetch flight data based on the query
                 const getFlightData = async (query) => {
                     const snapshot = await query.get();
@@ -71,7 +70,9 @@ const SearchResult = ({ navigation, route }) => {
                             departureCode: departureAirportData.code,
                             destinationCode: destinationAirportData.code,
                         };
+                        
                     }));
+                    
                 };
 
                 if (flights === undefined) {
