@@ -9,11 +9,11 @@ const BaggageScreen = ({ navigation, route }) => {
     const [selectedTravelProtection, setSelectedTravelProtection] = useState('no-insurance');
 
     const handleNextStep = () => {
-        navigation.navigate('Summary', {
-            passengerInformation,
-            selectedCabinBag,
-            selectedCheckedBag,
-            selectedTravelProtection,
+        navigation.navigate('SeatScreen', {
+            // passengerInformation,
+            // selectedCabinBag,
+            // selectedCheckedBag,
+            // selectedTravelProtection,
         });
     };
 

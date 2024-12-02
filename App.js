@@ -13,6 +13,8 @@ import BaggageScreen from './components/BaggageInformation';
 import HomeScreen from './components/Home';
 import LoginScreen from './components/login';
 import registerpage from './components/register';
+import Summary from './components/BookingCompleted';
+import SeatScreen from './components/SeatInformation';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,9 +39,17 @@ export default function App() {
         options={{ headerShown: false }}/>
         <Stack.Screen name="SearchResult" component={SearchResult} 
         options={{ headerShown: false }}/>
+        <Stack.Screen name="SeatScreen" component={SeatScreen} />
         <Stack.Screen name="SearchResults" component={SearchResultsDemo} />
-        <Stack.Screen name="FlightDetails" component={FlightDetails} />
-        <Stack.Screen name="PassengerInformation" component={PassengerInformation} />
+        <Stack.Screen name="FlightDetails" component={FlightDetails} 
+        options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Summary" component={Summary} 
+        options={{ headerShown: false }}
+        />
+        <Stack.Screen name="PassengerInformation" component={PassengerInformation} 
+        
+        />
         <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
         <Stack.Screen name="BaggageScreen" component={BaggageScreen} />
         <Stack.Screen name="SearchResultsDemo" component={SearchResultsDemo} />

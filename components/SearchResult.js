@@ -4,26 +4,85 @@ import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SortFilterModal from './SortFilterModal';
 
+// Dữ liệu mẫu
+const sampleFlightData = [
+    {
+        id: '1',
+        departure: 'New York',
+        destination: 'Los Angeles',
+        from: firestore.Timestamp.fromDate(new Date('2024-12-01T08:00:00Z')),
+        to: firestore.Timestamp.fromDate(new Date('2024-12-01T11:00:00Z')),
+        airline: 'Airline A',
+        duration: '6h 0m',
+        stops: 'Direct',
+        price: '$200',
+    },
+    {
+        id: '2',
+        departure: 'Chicago',
+        destination: 'Miami',
+        from: firestore.Timestamp.fromDate(new Date('2024-12-02T09:00:00Z')),
+        to: firestore.Timestamp.fromDate(new Date('2024-12-02T12:00:00Z')),
+        airline: 'Airline B',
+        duration: '3h 0m',
+        stops: '1 stop',
+        price: '$150',
+    },
+    {
+        id: '3',
+        departure: 'San Francisco',
+        destination: 'Seattle',
+        from: firestore.Timestamp.fromDate(new Date('2024-12-03T07:30:00Z')),
+        to: firestore.Timestamp.fromDate(new Date('2024-12-03T09:00:00Z')),
+        airline: 'Airline C',
+        duration: '1h 30m',
+        stops: 'Direct',
+        price: '$100',
+    },
+    {
+        id: '4',
+        departure: 'Boston',
+        destination: 'Washington D.C.',
+        from: firestore.Timestamp.fromDate(new Date('2024-12-04T14:00:00Z')),
+        to: firestore.Timestamp.fromDate(new Date('2024-12-04T15:30:00Z')),
+        airline: 'Airline D',
+        duration: '1h 30m',
+        stops: 'Direct',
+        price: '$120',
+    },
+    {
+        id: '5',
+        departure: 'Atlanta',
+        destination: 'New Orleans',
+        from: firestore.Timestamp.fromDate(new Date('2024-12-05T11:00:00Z')),
+        to: firestore.Timestamp.fromDate(new Date('2024-12-05T12:45:00Z')),
+        airline: 'Airline E',
+        duration: '1h 45m',
+        stops: '1 stop',
+        price: '$90',
+    },
+];
+
+
 const FlightResult = ({ flight, navigation }) => (
     <TouchableOpacity
         style={styles.resultContainer}
-        onPress={() => navigation.navigate('FlightDetail', { flightData: flight })}
+        onPress={() => navigation.navigate('FlightDetails', { flightData: flight })}
     >
         <View style={styles.flightInfo}>
-            <Text style={styles.timeText}>{flight.departureTime} - {flight.arrivalTime}</Text>
+            <Text style={styles.timeText}>{new Date(flight.from._seconds * 1000).toLocaleString()} - {new Date(flight.to._seconds * 1000).toLocaleString()}</Text>
             <Text style={styles.airlineText}>{flight.airline}</Text>
         </View>
         <View style={styles.routeInfo}>
-            <Text style={styles.airportCode}>{flight.departureCode}</Text> {/* Hiển thị mã sân bay khởi hành */}
+            <Text style={styles.airportCode}>{flight.departure}</Text>
             <Icon name="arrow-forward" size={16} color="#000" />
-            <Text style={styles.airportCode}>{flight.destinationCode}</Text> {/* Hiển thị mã sân bay đến */}
-            <Text style={styles.airportCode}>, {flight.weather}</Text> {/* Hiển thị mã sân bay đến */}
+            <Text style={styles.airportCode}>{flight.destination}</Text>
         </View>
         <View style={styles.details}>
             <Text style={styles.durationText}>{flight.duration}</Text>
-            <Text style={styles.stopsText}>{flight.stop}</Text>
+            <Text style={styles.stopsText}>{flight.stops}</Text>
         </View>
-        <Text style={styles.priceText}>${flight.price}</Text>
+        <Text style={styles.priceText}>{flight.price}</Text>
     </TouchableOpacity>
 );
 
@@ -35,48 +94,23 @@ const SearchResult = ({ navigation, route }) => {
     const [loading, setLoading] = useState(true);
     const { flights } = route.params;
 
-    // console.log('route.params:', route.params);
-    // console.log('flights:', flights);
-
     useEffect(() => {
         const fetchFlightData = async () => {
             try {
-                const db = firestore();
-                const flightRef = db.collection('flight1');
-                let query = flightRef;
-                console.log(flightRef)
-                // Function to fetch flight data based on the query
-                const getFlightData = async (query) => {
-                    const snapshot = await query.get();
-                    return await Promise.all(snapshot.docs.map(async (doc) => {
-                        const flightData = doc.data();
-                        const departureAirportId = flightData.departure.split('/').pop();
-                        const destinationAirportId = flightData.destination.split('/').pop();
-                        const departureCityId = flightData.departure.split('/').slice(-3, -2)[0];
-                        const destinationCityId = flightData.destination.split('/').slice(-3, -2)[0];
+                // Thay thế dữ liệu từ Firestore bằng dữ liệu mẫu
+                const useSampleData = true; // Thay đổi giá trị này để sử dụng dữ liệu mẫu
 
-                        // Fetch airport data
-                        const departureCityDoc = await db.collection('city').doc(departureCityId).get();
-                        const departureAirportDoc = await departureCityDoc.ref.collection('airport').doc(departureAirportId).get();
-                        const departureAirportData = departureAirportDoc.data();
+                if (useSampleData) {
+                    // Sử dụng dữ liệu mẫu
+                    setFlightData(sampleFlightData);
+                    setFilteredFlightData(sampleFlightData);
+                } else {
+                    // Nếu không sử dụng dữ liệu mẫu, lấy dữ liệu từ Firestore
+                    const db = firestore();
+                    const flightRef = db.collection('flight');
+                    let query = flightRef;
 
-                        const destinationCityDoc = await db.collection('city').doc(destinationCityId).get();
-                        const destinationAirportDoc = await destinationCityDoc.ref.collection('airport').doc(destinationAirportId).get();
-                        const destinationAirportData = destinationAirportDoc.data();
-
-                        return {
-                            id: doc.id,
-                            ...flightData,
-                            departureCode: departureAirportData.code,
-                            destinationCode: destinationAirportData.code,
-                        };
-                        
-                    }));
-                    
-                };
-
-                if (flights === undefined) {
-                    // Build query for one-way or roundtrip flights
+                    // Xây dựng truy vấn Firestore
                     if (type === 'round-trip') {
                         query = query.where('type', '==', 'round-trip');
                     } else if (type === 'one-way') {
@@ -97,31 +131,10 @@ const SearchResult = ({ navigation, route }) => {
                         query = query.where('to', '<=', returnTimestamp);
                     }
 
-                    // Fetch data for one-way or roundtrip flights
-                    const data = await getFlightData(query);
+                    const snapshot = await query.get();
+                    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     setFlightData(data);
                     setFilteredFlightData(data);
-                } else {
-                    // Handle multi-city flights
-                    const multiCityPromises = flights.map(async (flight) => {
-                        const flightQuery = flightRef
-                            .where('departure', '==', flight.from)
-                            .where('destination', '==', flight.to)
-                            .where('type', '==', 'one-way');
-
-                        if (flight.date) {
-                            const flightDateTimestamp = firestore.Timestamp.fromDate(new Date(flight.date));
-                            flightQuery.where('from', '>=', flightDateTimestamp);
-                        }
-
-                        return await getFlightData(flightQuery);
-                    });
-
-                    const multiCityResults = await Promise.all(multiCityPromises);
-                    const flattenedResults = multiCityResults.flat();
-
-                    setFlightData(flattenedResults);
-                    setFilteredFlightData(flattenedResults);
                 }
             } catch (error) {
                 console.log('Error fetching flight data:', error);
@@ -133,55 +146,9 @@ const SearchResult = ({ navigation, route }) => {
         fetchFlightData();
     }, [type, from, to, departureDate, returnDate, flights, travelerData]);
 
-    const handleApplyFilters = (filters) => {
-        const { sortOption, stopOption, selectedAirlines } = filters;
-
-        let filteredData = flightData.filter((flight) => {
-            const matchesStops =
-                stopOption === 'Any stops' ||
-                (stopOption === '1 stop or nonstop' && (flight.stops === '1 stop' || flight.stops === 'Direct')) ||
-                (stopOption === 'Nonstop only' && flight.stops === 'Direct');
-
-            const matchesAirline = selectedAirlines.size === 0 || selectedAirlines.has(flight.airline);
-            return matchesStops && matchesAirline;
-        });
-
-        if (sortOption === 'Cheapest') {
-            filteredData.sort((a, b) => parseFloat(a.price.replace('$', '')) - parseFloat(b.price.replace('$', '')));
-        } else if (sortOption === 'Fastest') {
-            filteredData.sort((a, b) => {
-                const [hoursA, minutesA] = a.duration.split('h ').map(part => parseInt(part));
-                const [hoursB, minutesB] = b.duration.split('h ').map(part => parseInt(part));
-                return (hoursA * 60 + minutesA) - (hoursB * 60 + minutesB);
-            });
-        }
-
-        setFilteredFlightData(filteredData);
-        setSortFilterVisible(false);
-    };
-
-    const renderItem = ({ item, index }) => {
-        // Convert Firestore timestamps to Date objects
-        const departureTime = item.from ?
-            new Date(item.from._seconds * 1000).toLocaleString() : 'N/A';
-        const arrivalTime = item.to ?
-            new Date(item.to._seconds * 1000).toLocaleString() : 'N/A';
-
-        // console.log('Departure time:', departureTime);
-        // console.log('Arrival time:', arrivalTime);
-
-        return (
-            <FlightResult
-                key={`flight-${index}`}
-                flight={{
-                    ...item,
-                    departureTime,
-                    arrivalTime,
-                }}
-                navigation={navigation}
-            />
-        );
-    };
+    const renderItem = ({ item }) => (
+        <FlightResult flight={item} navigation={navigation} />
+    );
 
     if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
@@ -215,7 +182,9 @@ const SearchResult = ({ navigation, route }) => {
             <SortFilterModal
                 visible={isSortFilterVisible}
                 onClose={() => setSortFilterVisible(false)}
-                onApply={handleApplyFilters}
+                onApply={(filters) => {
+                    // Logic để áp dụng bộ lọc
+                }}
             />
         </View>
     );
@@ -231,8 +200,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#00bdd6',
-        padding: 10,
+        padding: 20,
         borderRadius: 8,
+        // top:10,
         margin: 16,
     },
     sortFilterButtonText: {
@@ -240,6 +210,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginRight: 8,
+        height:30,
     },
     resultContainer: {
         backgroundColor: '#fff',
@@ -294,8 +265,8 @@ const styles = StyleSheet.create({
         color: '#00bdd6',
     },
     backButton: {
-        position: 'absolute',
-        top: 20,
+        // position: 'absolute',
+        // top: 5,
         left: 20,
         flexDirection: 'row',
         alignItems: 'center',
@@ -303,6 +274,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         backgroundColor: '#00bdd6',
         borderRadius: 20,
+        width:100,
     },
     backText: {
         color: '#fff',

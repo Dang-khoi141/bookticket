@@ -14,7 +14,7 @@ const LoginScreen = ({ navigation }) => {
       .then((userCredential) => {
         // Đăng nhập thành công
         const user = userCredential.user;
-        alert('Đăng nhập thành công!'); // Hiển thị thông báo
+        alert('Đăng nhập thành công!'); // Hiển thị thông báoa
         navigation.navigate('Home'); // Điều hướng đến màn hình 'Home'
       })
       .catch((error) => {

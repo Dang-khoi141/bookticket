@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icons from "react-native-vector-icons/Ionicons";
 const TravelOptions = ({ visible, onClose, onSelect, tripType }) => {
     const [adults, setAdults] = useState(0);
     const [children, setChildren] = useState(0);
@@ -62,7 +63,8 @@ const TravelOptions = ({ visible, onClose, onSelect, tripType }) => {
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerTitle}>Options</Text>
                     <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                        <Icon name="close" size={24} color="#000" />
+                        <Icons name="close-outline" size={24} color="#000" />
+                        
                     </TouchableOpacity>
                 </View>
                 <View style={styles.subContainer}>
